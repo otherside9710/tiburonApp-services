@@ -5,9 +5,8 @@ const jwt = require('jsonwebtoken');
 const userController = require('../controllers/user.controller');
 
 //router.delete('/:id', employeCtrl.deleteEmployee);
-//router.get('/findAll', userController.getUsers);
+router.get('/findAll', userController.getUsers);
 router.post('/save', userController.createUSer);
-//router.get('/:id', userController.getEmployee);
 router.put('/update', userController.updateUSer);
 
 //Esto para probar el jwt
