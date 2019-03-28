@@ -2,6 +2,21 @@ const userController = {};
 
 const User = require('../models/user');
 
+
+userController.getUsersByCredentials = (username, password) => {
+    try {
+        const users = {};//await User.findByEmailAndPassword(username, password);
+        return users;
+    } catch (err) {
+        console.log({
+            status: err.code, 
+            message: err.message
+        });
+    }
+    return null;
+};
+
+
 userController.getUsers = async (req, res) => {
     try {
         const users = await User.find();

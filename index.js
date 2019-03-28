@@ -12,7 +12,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors({origin : 'http://localhost:4200'}));
 //Routes
-//app.use('/api/employees', require('./routes/crud.routes'));
+app.use('/api/tiburon-app', require('./routes/user.routes'));
 //Starting the the server
 app.listen(app.get('port'), () => {
     console.log(`App listening on port ${app.get('port')}`)
