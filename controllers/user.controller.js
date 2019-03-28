@@ -8,12 +8,12 @@ userController.getUsersByCredentials = async (username, password) => {
         const users = await User.findByEmailAndPassword(username, password);
         return users;
     } catch (err) {
-        console.log({
+        console.error({
             status: err.code,
             message: err.message
         });
     }
-    return null;
+    return false;
 };
 
 
@@ -29,15 +29,15 @@ userController.getUsers = async (req, res) => {
 userController.createUSer = async (req, res) => {
     const user = new User({
        name : req.body.name,
-        lastName: req.body.lastname,
+        lastName: req.body.lastName,
         phone: req.body.phone,
         email: req.body.email,
         password: req.body.password,
         status: 'A'
     });
     try {
-        await user.save();
-        res.json({status:'201', message: 'User created'});
+        const userCreated = await user.save();
+        res.json({status:'201', message: 'User created', entity: userCreated});
     } catch (err) {
         res.json({status: err.code, message: err.message});
     }
