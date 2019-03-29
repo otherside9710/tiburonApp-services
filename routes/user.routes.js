@@ -28,7 +28,7 @@ router.post('/doLogin', (req, res) => {
 
 	    let token = jwt.sign(tokenData, 'Secret Password', {
 	        expiresIn: 60 * 60 // expires in 1 hours
-	    })
+	    });
 
 	    res.send({
 	        token

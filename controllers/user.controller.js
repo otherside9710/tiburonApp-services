@@ -53,9 +53,7 @@ userController.updateUSer = async (req, res) => {
         status: req.body.status
     });
     try {
-        //await Employee.findByIdAndUpdate(req.params.id, {$set: Employee}, {new: false});
-        const userFindOne = user.findByEmail;
-        await user.save();
+        await User.findByIdAndUpdate(req.params.id, {$set: user}, {new: false});
         res.json({status:'200', message: 'User updated'});
     } catch (err) {
         res.json({status: err.code, message: err.message});
