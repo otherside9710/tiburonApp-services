@@ -10,4 +10,4 @@ const UserSchema = new Schema({
     status : {type: String, required: true}
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('user', UserSchema);

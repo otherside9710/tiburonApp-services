@@ -3,9 +3,10 @@ const userController = {};
 const User = require('../models/user');
 
 
-userController.getUsersByCredentials = async (username, password) => {
+userController.getUsersByCredentials = async (email, password) => {
     try {
-        const users = await User.findByEmailAndPassword(username, password);
+        //const users = await User.findByEmailAndPassword(username, password);
+        const users = await User.findByEmail(email);
         return users;
     } catch (err) {
         console.error({
@@ -36,7 +37,7 @@ userController.createUSer = async (req, res) => {
         status: 'A'
     });
     try {
-        const userCreated = await user.save();
+        const userCreated = await User.create(user);
         res.json({status:'201', message: 'User created', entity: userCreated});
     } catch (err) {
         res.json({status: err.code, message: err.message});
