@@ -9,13 +9,13 @@ userController.getUsersByCredentials = async (req, res) => {
         let email = req.body.email;
         let password = req.body.password;
 
-        console.log("searching: ",email , password);
-        let user = await User.find({"$and":[{"email":email}, {"password":password}]});
+        console.log("searching: ", email, password);
+        let user = await User.find({"$and": [{"email": email}, {"password": password}]});
 
         if (Object.keys(user).length > 0) {
             let tokenData = {
-            username: email,
-            role: ["ROLE_USER", "ROLE_ADMIN"]
+                username: email,
+                role: ["ROLE_USER", "ROLE_ADMIN"]
             };
 
             let token = jwt.sign(tokenData, 'Secret_Password', {
@@ -23,10 +23,10 @@ userController.getUsersByCredentials = async (req, res) => {
             });
 
             res.send({
-                token
+                token,
+                userData: user[0]
             });
-        }
-        else {
+        } else {
             res.status(401).send({
                 error: 'usuario o contraseña inválidos'
             });
@@ -37,7 +37,7 @@ userController.getUsersByCredentials = async (req, res) => {
             message: err.message
         });
     }
-    
+
 };
 
 
@@ -52,7 +52,7 @@ userController.getUsers = async (req, res) => {
 
 userController.createUSer = async (req, res) => {
     const user = new User({
-       name : req.body.name,
+        name: req.body.name,
         lastName: req.body.lastName,
         phone: req.body.phone,
         email: req.body.email,
@@ -61,7 +61,12 @@ userController.createUSer = async (req, res) => {
     });
     try {
         const userCreated = await user.save();
-        res.json({status:'201', message: 'User created', entity: userCreated});
+        res.status(201).send({
+            token: generateToken(req),
+            status: '201',
+            message: 'User created',
+            userData: userCreated
+        });
     } catch (err) {
         res.json({status: err.code, message: err.message});
     }
@@ -69,7 +74,7 @@ userController.createUSer = async (req, res) => {
 
 userController.updateUSer = async (req, res) => {
     const user = new User({
-        name : req.body.name,
+        name: req.body.name,
         lastName: req.body.lastname,
         phone: req.body.phone,
         email: req.body.email,
@@ -78,10 +83,21 @@ userController.updateUSer = async (req, res) => {
     });
     try {
         await User.findByIdAndUpdate(req.params.id, {$set: user}, {new: false});
-        res.json({status:'200', message: 'User updated'});
+        res.json({status: '200', message: 'User updated'});
     } catch (err) {
         res.json({status: err.code, message: err.message});
     }
 };
+
+function generateToken($req) {
+    let tokenData = {
+        username: $req.body.email,
+        role: ["ROLE_USER", "ROLE_ADMIN"]
+    };
+
+    return jwt.sign(tokenData, 'Secret_Password', {
+        expiresIn: 60 * 60 // expires in 1 hours
+    });
+}
 
 module.exports = userController;
